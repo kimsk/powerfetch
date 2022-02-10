@@ -21,12 +21,18 @@ Param (
     [switch]$Colors
 )
 
+###### dotnet, node, python
+$dotnet_version = dotnet --version
+$node_version = node --version  | % { $_ -replace "v", "" }
+$python_version = python --version  | % { $_ -replace "Python ", "" }
+
 ###### Chia
 $error.clear()
 $null = Get-Command cdv -ErrorAction Ignore
 if ($error.Count -eq 0) {
     $chia_version = chia version
     $cdv_version = cdv --version | % { $_ -replace "cdv, version ", "" }
+    $chia_root = printenv | grep CHIA_ROOT
     # Write-Host "chia version: $chia_version"
 }
 else {
@@ -276,8 +282,13 @@ Write-Output "$($art[10]) [1;34mRAM:[0m $UsedRam MB / $TotalRam MB ([92m$Used
 #     Write-Output "$($art[$i]) [1;34mDisk:[0m $($DISKINFO[11 - $i++])"
 # }
 
-Write-Output "$($art[12]) [1;32mChia:[0m $chia_version"
-Write-Output "$($art[13]) [1;32mChia-Dev-Tools:[0m $cdv_version"
+Write-Output "$($art[12]) [1;33m.NET:[0m $dotnet_version"
+Write-Output "$($art[13]) [1;35mNode:[0m $node_version"
+Write-Output "$($art[14]) [1;36mPython:[0m $python_version"
+
+Write-Output "$($art[15]) [1;32mChia:[0m $chia_version"
+Write-Output "$($art[16]) [1;32mChia-Dev-Tools:[0m $cdv_version"
+Write-Output "$($art[17]) [1;32mChia-Root:[0m $chia_root"
 
 # https://gist.github.com/JBlond/2fea43a3049b38287e5e9cefc87b2124
 
